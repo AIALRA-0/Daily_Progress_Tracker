@@ -1,5 +1,5 @@
 
-# 日常进度追踪器（Daily Progress Tracker）
+# 日常进度追踪器 Daily Progress Tracker
 
 一个可视化、时间段驱动的每日任务追踪应用，基于 **Tkinter + ttkbootstrap + matplotlib** 开发，支持任务配置、完成状态记录、统计分析图表、自动隐藏等功能。
 <div align="center">
