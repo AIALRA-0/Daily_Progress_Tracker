@@ -5,6 +5,12 @@
 
 ---
 
+## ⚠️ 项目说明
+本项目为作者自用的日常任务追踪工具，初始开发以个人需求为主，界面行为和逻辑偏定制化，尚未全面测试。
+可能存在部分 bug 或异常场景未处理，如需部署到实际环境，请谨慎评估并自行测试。
+
+
+
 ## 🚀 功能特色
 
 - 🕘 **时间段任务配置**：支持 `HH:MM-HH:MM` 格式定义任务，要求 100% 时间覆盖。
@@ -18,19 +24,25 @@
 
 ## 📷 界面演示
 
-> 👉 可将实际截图保存至 `assets/` 文件夹，并替换下方图片路径。
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/09a08212-8d6b-4ffe-80c9-d9883b28ccaa" width="700"/>
+  <p><b>横向任务进度界面</b></p>
+</div>
 
-### 横向任务进度界面
-![横向进度示例]![image](https://github.com/user-attachments/assets/09a08212-8d6b-4ffe-80c9-d9883b28ccaa)
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/331a5f99-9982-467e-a417-84964dbc088e" width="500"/>
+  <p><b>竖向任务进度界面</b></p>
+</div>
 
-### 竖向任务进度界面
-![竖向进度示例]![image](https://github.com/user-attachments/assets/331a5f99-9982-467e-a417-84964dbc088e)
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/47d0dd9e-5826-495e-a33d-dfeae770ac79" width="700"/>
+  <p><b>统计图表页面（30天完成率）</b></p>
+</div>
 
-### 统计图表页面（30天柱状图）
-![统计图示例]![image](https://github.com/user-attachments/assets/47d0dd9e-5826-495e-a33d-dfeae770ac79)
-
-### 配置任务时间段界面
-![设置页面示例]![image](https://github.com/user-attachments/assets/c61b9d04-cbd9-4b19-a4d2-4df3a21d2ab3)
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/c61b9d04-cbd9-4b19-a4d2-4df3a21d2ab3" width="600"/>
+  <p><b>任务时间段配置页面</b></p>
+</div>
 
 ---
 
