@@ -30,7 +30,7 @@
 <div align="center"> <img src="https://github.com/user-attachments/assets/b439e20f-c8ad-4f98-a1f8-f8dea7eed258" width="700"/> </div>
 
 ### 竖向任务进度界面
-<div align="center"> <img src="https://github.com/user-attachments/assets/16a811d7-1026-4ebb-8234-fbddc8567c19" width="200"/> </div>
+<div align="center"> <img src="https://github.com/user-attachments/assets/16a811d7-1026-4ebb-8234-fbddc8567c19" width="160"/> </div>
 
 ### 统计图表页面（30天完成率）
 <div align="center"> <img src="https://github.com/user-attachments/assets/47d0dd9e-5826-495e-a33d-dfeae770ac79" width="700"/> </div>
