@@ -23,14 +23,13 @@
 ---
 
 ## 📷 界面演示
-
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/09a08212-8d6b-4ffe-80c9-d9883b28ccaa" width="700"/>
+  <img src="https://github.com/user-attachments/assets/b439e20f-c8ad-4f98-a1f8-f8dea7eed258" width="700"/>
   <p><b>横向任务进度界面</b></p>
 </div>
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/331a5f99-9982-467e-a417-84964dbc088e" width="500"/>
+  <img src="https://github.com/user-attachments/assets/16a811d7-1026-4ebb-8234-fbddc8567c19" width="500"/>
   <p><b>竖向任务进度界面</b></p>
 </div>
 
