@@ -50,8 +50,8 @@ class StatsPage(Frame):
         Label(self, text="计划选择：").pack(anchor="w", padx=10, pady=5)
 
         all_ids = list_config_ids()
-        self.plan_selector = Combobox(self, values=["[总体统计]"] + all_ids, width=20)
-        self.plan_selector.set("[总体统计]")
+        self.plan_selector = Combobox(self, values=["总体统计"] + all_ids, width=20)
+        self.plan_selector.set("总体统计")
         self.plan_selector.pack(anchor="w", padx=10)
         self.plan_selector.bind("<<ComboboxSelected>>", self.refresh_stats)
 
@@ -69,7 +69,7 @@ class StatsPage(Frame):
         """
         plan_id = self.plan_selector.get()
 
-        if plan_id == "[总体统计]":
+        if plan_id == "总体统计":
             self.load_aggregated_summary()
             return
     
@@ -159,6 +159,6 @@ class StatsPage(Frame):
         daily_data = [{"date": d, "ratio": all_data.get(d, 0)} for d in last_30_days]
 
         avg_ratio = sum(d["ratio"] for d in daily_data) / len(daily_data)
-        self.avg_label.config(text=f"[总体] 过去30天平均完成率：{int(avg_ratio * 100)}%")
+        self.avg_label.config(text=f"过去30天平均完成率：{int(avg_ratio * 100)}%")
 
         self.plot_daily_bar(daily_data)
