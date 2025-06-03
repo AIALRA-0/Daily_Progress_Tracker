@@ -49,8 +49,9 @@ class StatsPage(Frame):
         """
         Label(self, text="计划选择：").pack(anchor="w", padx=10, pady=5)
 
-        self.plan_selector = Combobox(self, values=list_config_ids(), width=20)
-        self.plan_selector.set(self.current_plan_id)
+        all_ids = list_config_ids()
+        self.plan_selector = Combobox(self, values=["[总体统计]"] + all_ids, width=20)
+        self.plan_selector.set("[总体统计]")
         self.plan_selector.pack(anchor="w", padx=10)
         self.plan_selector.bind("<<ComboboxSelected>>", self.refresh_stats)
 
@@ -67,6 +68,11 @@ class StatsPage(Frame):
         @param event ComboBox 事件（可忽略）
         """
         plan_id = self.plan_selector.get()
+
+        if plan_id == "[总体统计]":
+            self.load_aggregated_summary()
+            return
+    
         today = datetime.now()
         last_30_days = [(today - timedelta(days=i)).strftime("%Y-%m-%d") for i in range(29, -1, -1)]
 
@@ -132,3 +138,27 @@ class StatsPage(Frame):
         if self.on_close:
             self.on_close()
         self.master.destroy()
+    
+    def load_aggregated_summary(self):
+        """
+        汇总所有计划的每日最大完成率
+        """
+        from glob import glob
+        all_summaries = glob("data/summary_*.json")
+        all_data = {}
+        for path in all_summaries:
+            data = load_json(path, default={})
+            for day, ratio in data.items():
+                if day not in all_data:
+                    all_data[day] = ratio
+                else:
+                    all_data[day] = max(all_data[day], ratio)
+
+        today = datetime.now()
+        last_30_days = [(today - timedelta(days=i)).strftime("%Y-%m-%d") for i in range(29, -1, -1)]
+        daily_data = [{"date": d, "ratio": all_data.get(d, 0)} for d in last_30_days]
+
+        avg_ratio = sum(d["ratio"] for d in daily_data) / len(daily_data)
+        self.avg_label.config(text=f"[总体] 过去30天平均完成率：{int(avg_ratio * 100)}%")
+
+        self.plot_daily_bar(daily_data)

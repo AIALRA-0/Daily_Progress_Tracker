@@ -51,9 +51,16 @@ class ProgressPage(Frame):
         )
 
         self.status_file = f"data/status_{self.plan_id}.json"
-        self.status = load_json(self.status_file, {}) if os.path.exists(self.status_file) else {
-            task["time"]: False for task in self.tasks
-        }
+        self.status = load_json(self.status_file, {})
+
+        # 检查日期是否为今天
+        status_date = self.status.get("_date")
+        today = get_today()
+
+        if status_date != today:
+            self.status = {task["time"]: False for task in self.tasks}
+            self.status["_date"] = today
+            save_json(self.status_file, self.status)
 
         self.check_vars: list[tuple[dict, BooleanVar]] = []
 
@@ -343,6 +350,7 @@ class ProgressPage(Frame):
         """
         for task, var in self.check_vars:
             self.status[task["time"]] = var.get()
+        self.status["_date"] = get_today()
         save_json(self.status_file, self.status)
         self.update_progress()
     
@@ -374,6 +382,7 @@ class ProgressPage(Frame):
 
             self.date = now_str
             self.status = {task["time"]: False for task in self.tasks}
+            self.status["_date"] = now_str
             save_json(self.status_file, self.status)
             self.draw_progress_bar()
 
@@ -655,8 +664,7 @@ class ProgressPage(Frame):
         每个计划仅维护一个汇总文件，如 data/summary_default.json，
         结构为 { "YYYY-MM-DD": ratio }，用于展示统计图。
         """
-        now = datetime.now()
-        date = now.strftime("%Y-%m-%d")
+        date = get_today()
         total = len(self.check_vars)
         done = sum(var.get() for _, var in self.check_vars)
         ratio = round(done / total, 4) if total > 0 else 0
