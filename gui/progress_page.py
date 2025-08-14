@@ -1,6 +1,6 @@
 import os
 import tkinter as tk
-from datetime import datetime
+from datetime import datetime, timedelta
 from tkinter import messagebox
 from ttkbootstrap import Frame, Label, Checkbutton, BooleanVar, Button, Combobox
 from ttkbootstrap.dialogs import Messagebox
@@ -70,6 +70,20 @@ class ProgressPage(Frame):
         self.after(1000, self.update_ui_periodically)
         self.after_idle(self.adjust_layout)
         self._layout_locked = False
+        
+        # 初始化当天已提醒集合
+        self._notified_starts: set[str] = set()
+
+        # 可选：启动时对“当前正在进行的段”的开始做忽略，避免启动即提醒
+        now = datetime.now()
+        today = now.date()
+        for task in self.tasks:
+            s_str, e_str = task["time"].split("-")
+            s_dt = str_to_datetime(today, s_str)
+            e_dt = str_to_datetime(today, e_str)
+            if s_dt <= now < e_dt:
+                self._notified_starts.add(f"{self.date}::{task['time']}")
+                break
 
     # ------------------------------ UI 构建 ------------------------------ #
     def build_ui(self) -> None:
@@ -384,9 +398,15 @@ class ProgressPage(Frame):
             self.status = {task["time"]: False for task in self.tasks}
             self.status["_date"] = now_str
             save_json(self.status_file, self.status)
+
+            self._notified_starts.clear()   # ← 跨天重置提醒
             self.draw_progress_bar()
 
         self.time_label.config(text=datetime.now().strftime("%H:%M"))
+
+        # 检查是否到达某个时间段的开始
+        self._check_and_notify_task_start()
+
         self.draw_progress_bar()
         self.adjust_layout()
         self._ui_update_job = self.after(1000, self.update_ui_periodically)
@@ -597,6 +617,7 @@ class ProgressPage(Frame):
             self.plan_data.get("tasks", []),
             key=lambda t: time_to_minutes(t["time"].split("-")[0])
         )
+        self._notified_starts.clear()  # 切换计划后重置提醒
         self.check_vars.clear()
 
         for widget in self.winfo_children():
@@ -677,5 +698,41 @@ class ProgressPage(Frame):
     
         summary_data[date] = ratio
         save_json(summary_path, summary_data)
+
+    def _check_and_notify_task_start(self) -> None:
+        """
+        若当前时间位于任一任务开始时刻的“提醒窗口”内（默认60秒），
+        且当天尚未提醒过该时间段，则弹窗提示开始该任务。
+        """
+        now = datetime.now()
+        today = now.date()
+    
+        # 提醒窗口：开始时刻 ~ 开始时刻 + 60s
+        window_seconds = 60
+    
+        for task in self.tasks:
+            start_str = task["time"].split("-")[0]
+            s_dt = str_to_datetime(today, start_str)
+            key = f"{self.date}::{task['time']}"   # 当天 + 时间段 唯一键
+    
+            if key in self._notified_starts:
+                continue
+            
+            # 命中提醒窗口
+            if s_dt <= now < (s_dt + timedelta(seconds=window_seconds)):
+                self._notified_starts.add(key)
+    
+                # 保证窗口浮到最前
+                try:
+                    self.master.lift()
+                    self.master.attributes("-topmost", True)
+                    # 稍后取消顶置交给现有逻辑（或保留顶置也可）
+                except Exception:
+                    pass
+                
+                # 弹窗提示（使用 tkinter 的 messagebox，避免 ttkbootstrap 兼容性差异）
+                messagebox.showinfo("开始新任务", f"现在 {start_str}，请开始：{task['task']}")
+                break  # 本轮只弹一次，避免同秒多任务时多次弹窗
+            
 
 

@@ -1,4 +1,4 @@
-matplotlib==3.10.3
+matplotlib==3.10.5
 ttkbootstrap==1.10.1
 pipreqs
 pyinstaller
